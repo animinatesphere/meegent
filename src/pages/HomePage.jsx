@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import wa1 from "../assets/Frame 2147225395 (1).png";
 import wa2 from "../assets/wallet_5_fill.png";
-import wa3 from "../assets/image (7).png";
+import wa3 from "../assets/Image (7).png";
 import wa4 from "../assets/Frame 2147225228.png";
 import wa5 from "../assets/Frame 2147225229.png";
 import ev from "../assets/image 52.png";
@@ -109,10 +109,7 @@ const HomePage = ({ navigate }) => {
               alt=""
               className="w-11 h-11 md:w-13 md:h-13 rounded-full flex-shrink-0"
             />
-            <button
-              className="flex items-center gap-2"
-              onClick={handleCopy}
-            >
+            <button className="flex items-center gap-2" onClick={handleCopy}>
               <span
                 className="text-sm px-3 py-1 rounded-full"
                 style={{ background: "#F0EBE3", color: "#8B8068" }}
@@ -217,7 +214,10 @@ const HomePage = ({ navigate }) => {
             <h2 className="text-base md:text-xl lg:text-2xl font-bold in text-[#1C1C1C]">
               Upcoming Events
             </h2>
-            <Link to="/seeall" className="text-xs md:text-sm font-semibold text-[#F3A218]">
+            <Link
+              to="/seeall"
+              className="text-xs md:text-sm font-semibold text-[#F3A218]"
+            >
               See all
             </Link>
           </div>
@@ -471,10 +471,7 @@ const HomePage = ({ navigate }) => {
                   </svg>
                 </div>
               </div>
-              <p
-                className="text-xs mb-3"
-                style={{ color: "#98A2B3" }}
-              >
+              <p className="text-xs mb-3" style={{ color: "#98A2B3" }}>
                 {selectedEvent.desc}
               </p>
               <div className="flex items-center gap-2 mb-3">
