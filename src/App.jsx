@@ -10,6 +10,10 @@ import WalletPage from "./pages/WalletPage";
 import FavoritePage from "./pages/FavoritePage";
 import SeeAllPage from "./pages/SeeAllPage";
 import SplashPage from "./pages/SplashPage";
+import EventsPage from "./pages/EventsPage";
+import ManageEventPage from "./pages/ManageEventPage";
+import ProfilePage from "./pages/ProfilePage";
+import NotificationPage from "./pages/NotificationPage";
 
 const MobileFrame = ({ children }) => (
   <div
@@ -57,6 +61,7 @@ function App() {
         element={<SmartWalletPage navigate={navigate} />}
       />
       <Route path="/home" element={<HomePage navigate={navigate} />} />
+      <Route path="/events" element={<EventsPage navigate={navigate} goBack={goBack} />} />
       <Route
         path="/seeall"
         element={<SeeAllPage navigate={navigate} />}
@@ -82,6 +87,18 @@ function App() {
             <EventCreatedPage navigate={navigate} pageData={pageData} />
           </MobileFrame>
         }
+      />
+      <Route
+        path="/manageevent"
+        element={<ManageEventPage navigate={navigate} />}
+      />
+      <Route
+        path="/profile"
+        element={<ProfilePage />}
+      />
+      <Route
+        path="/notifications"
+        element={<NotificationPage />}
       />
     </Routes>
   );
