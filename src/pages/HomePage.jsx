@@ -72,7 +72,7 @@ const HomePage = ({ navigate }) => {
       {/* Top bar with icons */}
       {/* Top bar */}
       <div>
-        <div className="max-w-5xl mx-auto flex justify-center md:justify-end gap-3 pt-3 pb-2 px-5 md:px-8">
+        <div className="max-w-5xl  flex justify-end md:justify-end gap-3 pt-3 pb-2 px-5 md:px-8">
           <Link to="/home">
             <div className="w-9 h-9 rounded-lg flex items-center justify-center">
               <img src={wa1} />
@@ -109,7 +109,10 @@ const HomePage = ({ navigate }) => {
               alt=""
               className="w-11 h-11 md:w-13 md:h-13 rounded-full flex-shrink-0"
             />
+            <div classname="flex flex-">
+            <p>Hey, Rebacca</p>
             <button className="flex items-center gap-2" onClick={handleCopy}>
+              
               <span
                 className="text-sm px-3 py-1 rounded-full"
                 style={{ background: "#F0EBE3", color: "#8B8068" }}
@@ -136,6 +139,7 @@ const HomePage = ({ navigate }) => {
                 </span>
               )}
             </button>
+            </div>
           </div>
           <div className="flex gap-2">
             {/* ADD BUTTON - navigates to Create Event */}
