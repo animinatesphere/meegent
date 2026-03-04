@@ -7,7 +7,7 @@ import fra from "../assets/Frame 2147226215.png";
 import lo from "../assets/location_fill.png";
 import lo2 from "../assets/alarm_2_fill.png";
 
-const FavoritePage = ({ navigate }) => {
+const FavoritePage = () => {
   const [fadeIn, setFadeIn] = useState(false);
   const [favorites] = useState([
     {
@@ -47,27 +47,26 @@ const FavoritePage = ({ navigate }) => {
     >
       {/* Top bar */}
       <div>
-        <div className="max-w-5xl mx-auto flex justify-center md:justify-end gap-3 pt-3 pb-2 px-5 md:px-8">
-          <Link to="/home">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center">
-              <img src={wa1} alt="" />
+        <div className="max-w-5xl mx-auto flex justify-end pt-5 pb-2 px-5 md:px-8">
+          <div className="flex items-center gap-5 bg-white rounded-full px-5 py-2.5 shadow-sm">
+            <Link to="/profile">
+              <img src={wa1} alt="Profile" className="w-5 h-5 object-contain" />
+            </Link>
+            <Link to="/wallet">
+              <img src={wa2} alt="Wallet" className="w-5 h-5 object-contain" />
+            </Link>
+            <div className="flex items-center justify-center">
+              <svg
+                width="20"
+                height="20"
+                fill="#F3A218"
+                stroke="#F3A218"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
             </div>
-          </Link>
-          <Link to="/wallet">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center">
-              <img src={wa2} alt="" />
-            </div>
-          </Link>
-          <div className="w-9 h-9 rounded-lg flex items-center justify-center">
-            <svg
-              width="16"
-              height="16"
-              fill="#F3A218"
-              stroke="#F3A218"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
           </div>
         </div>
       </div>
