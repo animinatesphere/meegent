@@ -12,7 +12,9 @@ const CreateEventPage = ({ navigate, goBack }) => {
   const [endDate, setEndDate] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [ticketPrice] = useState("Free $GLM");
+  const [ticketPrice, setTicketPrice] = useState("Free $GLM");
+  const [showPriceModal, setShowPriceModal] = useState(false);
+  const [priceInput, setPriceInput] = useState("0");
   const [requireApproval, setRequireApproval] = useState(false);
   const [capacity] = useState("Unlimited");
   const [gmail, setGmail] = useState("");
@@ -275,7 +277,10 @@ const CreateEventPage = ({ navigate, goBack }) => {
               className="mx-5 md:mx-0 rounded-2xl p-4 md:p-5 mb-4 md:mb-0"
               style={{ background: "#F5F0E8" }}
             >
-              <div className="flex items-center justify-between mb-3">
+              <button
+                className="flex items-center justify-between mb-3 w-full"
+                onClick={() => setShowPriceModal(true)}
+              >
                 <div className="flex items-center gap-2">
                   <svg
                     width="16"
@@ -311,7 +316,7 @@ const CreateEventPage = ({ navigate, goBack }) => {
                     <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                   </svg>
                 </div>
-              </div>
+              </button>
 
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
@@ -487,6 +492,109 @@ const CreateEventPage = ({ navigate, goBack }) => {
           Create Event
         </button>
       </div>
+
+      {/* Ticket Price Modal */}
+      {showPriceModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-5"
+          style={{ background: "rgba(0,0,0,0.5)" }}
+          onClick={() => setShowPriceModal(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-3xl p-6 relative"
+            style={{
+              background: "#FFFBF4",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.15)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* User info pill */}
+            <div
+              className="flex items-center gap-2.5 rounded-full px-3 py-2 mb-6 w-fit"
+              style={{ background: "#FFF3E0", border: "1px solid #FDE9C4" }}
+            >
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ background: "#E8960C" }}
+              >
+                <svg width="14" height="14" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold" style={{ color: "#2D2A26" }}>
+                  {eventName || "Event"}
+                </p>
+                <p className="text-[11px]" style={{ color: "#8B8068" }}>
+                  @organizer
+                </p>
+              </div>
+            </div>
+
+            {/* Title */}
+            <h3
+              className="text-lg font-bold text-center mb-5"
+              style={{ color: "#2D2A26" }}
+            >
+              Ticket Price
+            </h3>
+
+            {/* Price input area */}
+            <div
+              className="rounded-2xl px-5 py-4 mb-6 flex items-center justify-center gap-2"
+              style={{ background: "#FFF8EE", border: "1.5px solid #FDE9C4" }}
+            >
+              <span
+                className="text-2xl sm:text-3xl font-black"
+                style={{ color: "#2D2A26", fontFamily: "'Georgia', serif" }}
+              >
+                $GLM
+              </span>
+              <input
+                type="number"
+                value={priceInput}
+                onChange={(e) => setPriceInput(e.target.value)}
+                className="text-2xl sm:text-3xl font-black bg-transparent outline-none w-20 sm:w-24"
+                style={{
+                  color: "#2D2A26",
+                  fontFamily: "'Georgia', serif",
+                  caretColor: "#E8960C",
+                }}
+                min="0"
+                autoFocus
+              />
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="#E8960C"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                className="flex-shrink-0"
+              >
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </div>
+
+            {/* Confirm button */}
+            <button
+              className="w-full py-3.5 rounded-full text-base font-bold"
+              style={{
+                background: "#E8960C",
+                color: "white",
+              }}
+              onClick={() => {
+                const val = Number(priceInput);
+                setTicketPrice(val > 0 ? `${val} $GLM` : "Free $GLM");
+                setShowPriceModal(false);
+              }}
+            >
+              Set Price
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
