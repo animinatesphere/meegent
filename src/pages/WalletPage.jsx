@@ -38,7 +38,9 @@ const WalletPage = () => {
 
   const [showTransactions, setShowTransactions] = useState(true);
 
-  const balance = showTransactions ? "100.20" : "0.00";
+  // Split balance to style decimals differently
+  const balanceWhole = showTransactions ? "100" : "0";
+  const balanceDecimal = showTransactions ? ".20" : ".00";
 
   useEffect(() => {
     setTimeout(() => setFadeIn(true), 100);
@@ -143,7 +145,6 @@ const WalletPage = () => {
           className="text-2xl font-bold mb-2"
           style={{
             color: "#2D2A26",
-            fontFamily: "'Georgia', serif",
           }}
         >
           My Wallet
@@ -185,7 +186,7 @@ const WalletPage = () => {
             background: "#E8960C",
           }}
         >
-          {/* Keith Haring-style art pattern */}
+          {/* Top patterned area with wavy cut-out */}
           <div
             className="mx-auto rounded-2xl overflow-hidden"
             style={{
@@ -218,6 +219,16 @@ const WalletPage = () => {
                 Send
               </button>
             </div>
+
+            <button
+              className="px-6 py-[14px] rounded-[14px] text-base font-medium shadow-sm transition-transform hover:scale-105"
+              style={{
+                background: "#EEDBB4",
+                color: "#1A1A1A",
+              }}
+            >
+              Send
+            </button>
           </div>
         </div>
 
@@ -227,7 +238,6 @@ const WalletPage = () => {
             className="text-lg font-bold"
             style={{
               color: "#2D2A26",
-              fontFamily: "'Georgia', serif",
             }}
           >
             Recent activity

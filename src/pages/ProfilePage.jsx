@@ -40,6 +40,13 @@ const ProfilePage = () => {
     // Toggle state mimicking the mockup (whether the user is an event creator)
     const [isEventOwner] = useState(true);
 
+    // Profile Edit State
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [name, setName] = useState("Anita Ndukwe");
+
+    const [isEditingEmail, setIsEditingEmail] = useState(false);
+    const [email, setEmail] = useState("Anitandukwe@gmail.com");
+
     // Settings Toggle state
     const [emailAlerts, setEmailAlerts] = useState(false);
 
@@ -86,23 +93,51 @@ const ProfilePage = () => {
                     <div className="w-[68px] h-[68px] rounded-full overflow-hidden border-[1px] border-[#FFFBF4] shadow-sm mb-3 relative">
                         <img src={profilePic} alt="Ndukwe Anita" className="w-full h-full object-cover" />
                     </div>
-                    <h2 className="text-[13px] font-medium text-[#98A2B3]">Ndukwe Anita</h2>
+                    <h2 className="text-[13px] font-medium text-[#98A2B3]">{name}</h2>
                 </div>
 
                 {/* Details Card */}
                 <div className="bg-white rounded-[16px] p-5 mb-6 w-full flex flex-col gap-6">
                     <div className="flex items-center justify-between">
-                        <span className="text-[14px] font-medium text-[#344054]">Full Name</span>
-                        <div className="flex items-center gap-2">
-                            <span className="text-[14px] text-[#98A2B3]">Anita Ndukwe</span>
-                            <EditPenIcon />
+                        <span className="text-[14px] font-medium text-[#344054] whitespace-nowrap">Full Name</span>
+                        <div className="flex items-center gap-2 justify-end w-full ml-4">
+                            {isEditingName ? (
+                                <input
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    onBlur={() => setIsEditingName(false)}
+                                    onKeyDown={(e) => { if (e.key === 'Enter') setIsEditingName(false) }}
+                                    autoFocus
+                                    className="text-[14px] text-[#111827] bg-[#F5F0E8] px-2 py-1 rounded outline-none w-full text-right"
+                                />
+                            ) : (
+                                <span className="text-[14px] text-[#98A2B3] truncate">{name}</span>
+                            )}
+                            <button onClick={() => setIsEditingName(!isEditingName)} className="flex-shrink-0">
+                                <EditPenIcon />
+                            </button>
                         </div>
                     </div>
                     <div className="flex items-center justify-between">
-                        <span className="text-[14px] font-medium text-[#344054]">Email address</span>
-                        <div className="flex items-center gap-2">
-                            <span className="text-[14px] text-[#98A2B3]">Anitandukwe@gmail.com</span>
-                            <EditPenIcon />
+                        <span className="text-[14px] font-medium text-[#344054] whitespace-nowrap">Email address</span>
+                        <div className="flex items-center gap-2 justify-end w-full ml-4">
+                            {isEditingEmail ? (
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    onBlur={() => setIsEditingEmail(false)}
+                                    onKeyDown={(e) => { if (e.key === 'Enter') setIsEditingEmail(false) }}
+                                    autoFocus
+                                    className="text-[14px] text-[#111827] bg-[#F5F0E8] px-2 py-1 rounded outline-none w-full text-right"
+                                />
+                            ) : (
+                                <span className="text-[14px] text-[#98A2B3] truncate">{email}</span>
+                            )}
+                            <button onClick={() => setIsEditingEmail(!isEditingEmail)} className="flex-shrink-0">
+                                <EditPenIcon />
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -6,10 +6,13 @@ import wa3 from "../assets/Image (7).png";
 import wa4 from "../assets/Frame 2147225228.png";
 import wa5 from "../assets/Frame 2147225229.png";
 import ev from "../assets/image 52.png";
+import ev2 from "../assets/event-modal/image 24.png";
 import fra from "../assets/Frame 2147226215.png";
 import lo from "../assets/location_fill.png";
 import lo2 from "../assets/alarm_2_fill.png";
 import im from "../assets/image (8).png";
+import img2 from "../assets/image.png";
+import img3 from "../assets/image 26.png";
 
 import memoji1 from "../assets/event-modal/avatar/Memoji-1.png";
 import memoji2 from "../assets/event-modal/avatar/Memoji-2.png";
@@ -18,16 +21,77 @@ import memoji4 from "../assets/event-modal/avatar/Memoji-4.png";
 import memoji5 from "../assets/event-modal/avatar/Memoji.png";
 
 import { FiLink, FiPhone, FiMessageSquare, FiArrowLeft } from "react-icons/fi";
+import Header from "../components/Header";
+
 const HomePage = ({ navigate }) => {
   const [activeTag, setActiveTag] = useState("All");
   const [fadeIn, setFadeIn] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [favorites, setFavorites] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalView, setModalView] = useState("main"); // "main", "readMore", "map"
   const [quantity, setQuantity] = useState(1);
+  const [dragY, setDragY] = useState(0);
+  const [startY, setStartY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+
   useEffect(() => {
     setTimeout(() => setFadeIn(true), 100);
+    const saved = localStorage.getItem("meegent_favorites");
+    if (saved) {
+      try {
+        setFavorites(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse favorites", e);
+      }
+    }
   }, []);
+
+  const toggleFavorite = (event, e) => {
+    e.stopPropagation();
+    let newFavs;
+    const isFav = favorites.some((fav) => fav.id === event.id);
+    if (isFav) {
+      newFavs = favorites.filter((fav) => fav.id !== event.id);
+    } else {
+      newFavs = [...favorites, event];
+    }
+    setFavorites(newFavs);
+    localStorage.setItem("meegent_favorites", JSON.stringify(newFavs));
+  };
+
+  const handleDragStart = (e) => {
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    setStartY(clientY);
+    setIsDragging(true);
+  };
+
+  const handleDragMove = (e) => {
+    if (!isDragging) return;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const diff = clientY - startY;
+    if (diff > 0) {
+      setDragY(diff);
+    }
+  };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    if (dragY > 100) {
+      setSelectedEvent(null);
+      setModalView("main");
+    } else {
+      setDragY(0);
+    }
+  };
+
+  useEffect(() => {
+    if (!selectedEvent) {
+      setDragY(0);
+      setIsDragging(false);
+    }
+  }, [selectedEvent]);
 
   const tags = ["All", "Crypto", "festival", "Concert", "Fitness"];
 
@@ -35,6 +99,7 @@ const HomePage = ({ navigate }) => {
     {
       id: 1,
       title: "Acoustic Serenade Show",
+      category: "Concert",
       desc: "Listen to good music with Joel.",
       location: "New York, USA",
       date: "May 29 - 10:00 AM",
@@ -53,12 +118,13 @@ const HomePage = ({ navigate }) => {
     {
       id: 2,
       title: "Arkiv Hangout",
+      category: "Crypto",
       desc: "Web3 Dev meetup",
       location: "New York",
       date: "May 30 - 2:00 PM",
       price: "0 $GLM",
       perPerson: false,
-      ev: ev,
+      ev: ev2,
       isVirtual: true,
       virtualLink: "http://meet.google.c",
       about:
@@ -69,23 +135,66 @@ const HomePage = ({ navigate }) => {
       },
       attendees: 5000,
     },
-  ];
-  const events2 = [
     {
-      id: 1,
-      title: "Acoustic Serenade Show",
-      desc: "Listen to good music with Joel.",
+      id: 3,
+      title: "Eth CC canes",
+      category: "Crypto",
+      desc: "Building tools not just apps.",
       location: "New York, USA",
       date: "May 29 - 10:00 AM",
       price: "200 $GLM",
       perPerson: true,
-      ev: ev,
+      ev: img3,
+      isVirtual: false,
+      hasPlusButton: true,
+      about: "Eth CC canes is a major event in New York.",
+      organizer: {
+        name: "Eth CC Team",
+        role: "Organize Team"
+      },
+      attendees: 2500
+    },
+  ];
+  const events2 = [
+    {
+      id: 1,
+      title: "Thailand Web3 Meet up",
+      category: "Crypto",
+      location: "Bangkok",
+      date: "May 29 - 10:00 AM",
+      price: "200 $GLM",
+      perPerson: true,
+      ev: im,
+      about: "Join us in Bangkok for the biggest Web3 Meet up in Thailand.",
+      organizer: { name: "Web3 Thailand", role: "Organizer" },
+      attendees: 500
+    },
+    {
+      id: 2,
+      title: "Tomorrow wonderland",
+      category: "festival",
+      location: "Thailand",
+      date: "Mar 29 - 10:00 AM",
+      price: "0 $GLM",
+      perPerson: true,
+      ev: img2,
+      about: "Experience the magic of Tomorrow Wonderland in Thailand.",
+      organizer: { name: "Wonderland Events", role: "Organizer" },
+      attendees: 1200
     },
   ];
   const handleCopy = () => {
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    navigator.clipboard.writeText("0x87... 6569hb")
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+      })
+      .catch((err) => console.error("Failed to copy text: ", err));
   };
+
+  const filteredEvents = activeTag === "All" ? events : events.filter(e => e.category === activeTag);
+  const filteredEvents2 = activeTag === "All" ? events2 : events2.filter(e => e.category === activeTag);
+
   return (
     <div
       className="min-h-screen flex flex-col border-20 border-[#FFFFFF]"
@@ -95,7 +204,6 @@ const HomePage = ({ navigate }) => {
         opacity: fadeIn ? 1 : 0,
       }}
     >
-      {/* Top bar with icons */}
       {/* Top bar */}
       <div>
         <div className="max-w-5xl mx-auto flex justify-end gap-3 pt-3 pb-2 px-5 md:px-8">
@@ -184,8 +292,8 @@ const HomePage = ({ navigate }) => {
               className="w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center"
               // style={{ border: "1.5px solid #E8960C" }}
             >
-              <img src={wa5} alt="" />
-            </div>
+              <img src={wa5} alt="Notifications" />
+            </button>
           </div>
         </div>
 
@@ -299,38 +407,67 @@ const HomePage = ({ navigate }) => {
                       className="text-[17px] font-bold truncate"
                       style={{ color: "#202D3D" }}
                     >
-                      {event.title}
-                    </h3>
+                      {favorites.some((fav) => fav.id === event.id) ? (
+                        <svg width="16" height="16" fill="#F3A218" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                      ) : (
+                        <svg width="16" height="16" fill="none" stroke="#F3A218" strokeWidth="2" viewBox="0 0 24 24">
+                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                        </svg>
+                      )}
+                    </div>
                   </div>
-                  <p
-                    className="text-xs in md:text-sm mb-2"
-                    style={{ color: "#98A2B3" }}
-                  >
-                    {event.desc}
-                  </p>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="">
-                      <img src={lo} alt="" />
-                    </span>
-                    <span className="text-xs in" style={{ color: "#475367" }}>
-                      {event.location}
-                    </span>
-                    <img src={lo2} alt="" />
-                    <span className="text-xs" style={{ color: "#475367" }}>
-                      {event.date}
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span
-                      className="text-sm font-bold inter"
-                      style={{ color: "#E8960C" }}
-                    >
-                      {event.price}{" "}
+
+                  {/* Event details */}
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex flex-col min-w-0 pr-2">
+                        <h3
+                          className="text-[15px] xl:text-[16px] font-bold truncate mb-1"
+                          style={{ color: "#202D3D" }}
+                        >
+                          {event.title}
+                        </h3>
+                        <p
+                          className="text-[11px] in md:text-[12px] truncate"
+                          style={{ color: "#98A2B3" }}
+                        >
+                          {event.desc}
+                        </p>
+                      </div>
+                      {event.hasPlusButton && (
+                        <button className="w-10 h-10 rounded-xl flex flex-shrink-0 items-center justify-center text-white" style={{ background: "#F3A218" }} onClick={(e) => e.stopPropagation()}>
+                          <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-1.5 flex-shrink-0 truncate">
+                        <img src={lo} className="w-3.5 h-3.5 flex-shrink-0" alt="" />
+                        <span className="text-[10px] xl:text-[11px] truncate font-medium" style={{ color: "#475367" }}>
+                          {event.location}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 flex-shrink-0 truncate">
+                        <img src={lo2} className="w-3.5 h-3.5 flex-shrink-0" alt="" />
+                        <span className="text-[10px] xl:text-[11px] truncate font-medium" style={{ color: "#475367" }}>
+                          {event.date}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between">
                       <span
-                        className="text-xs font-normal inter"
-                        style={{ color: "#475367" }}
+                        className="text-sm font-bold inter"
+                        style={{ color: "#E8960C" }}
                       >
-                        {event.perPerson ? "/Person" : ""}
+                        {event.price}{" "}
+                        <span
+                          className="text-xs font-normal inter"
+                          style={{ color: "#475367" }}
+                        >
+                          {event.perPerson ? "/Person" : ""}
+                        </span>
                       </span>
                     </span>
                     <div className="flex -space-x-[10px] items-center">
@@ -375,14 +512,16 @@ const HomePage = ({ navigate }) => {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-gray-500 py-4">No events found for {activeTag}.</p>
+            )}
           </div>
         </div>
 
         {/* Hot this week */}
         <div className="px-5 md:px-8 pb-6">
-          <div className="flex justify-between items-center mb-3">
+          <div className="flex justify-between items-center mb-4">
             <h2
               className="text-base md:text-xl in lg:text-2xl font-bold"
               style={{ color: "#2D2A26" }}
@@ -485,11 +624,12 @@ const HomePage = ({ navigate }) => {
                     <span className="text-[8px] font-bold text-white">+34</span>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-sm text-gray-500 py-4">No events found for {activeTag}.</p>
+            )}
           </div>
         </div>
-      </div>
 
       {/* Event Modal / Bottom Sheet */}
       {selectedEvent && (
@@ -510,7 +650,6 @@ const HomePage = ({ navigate }) => {
               boxShadow: "0 -8px 40px rgba(0,0,0,0.15)",
               maxHeight: "90vh",
             }}
-            onClick={(e) => e.stopPropagation()}
           >
             {/* Minimal top border/handle piece */}
             <div className="flex justify-center pt-3 pb-1">
@@ -555,7 +694,6 @@ const HomePage = ({ navigate }) => {
                       {selectedEvent.date}
                     </span>
                   </div>
-                </div>
 
                 {/* Attendees */}
                 <div className="flex items-center gap-3 mb-5">
@@ -674,7 +812,6 @@ const HomePage = ({ navigate }) => {
                       </button>
                     </div>
                   </div>
-                </div>
 
                 {/* Address block */}
                 <div className="mb-6 flex items-end justify-between">
@@ -731,15 +868,10 @@ const HomePage = ({ navigate }) => {
                     >
                       {quantity}
                     </div>
-                    <button
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-600"
-                      style={{ background: "#F5E6D3" }}
-                    >
-                      +
+                    <button onClick={() => setModalView("map")} className="text-sm font-bold mb-0.5" style={{ color: "#F3A218" }}>
+                      View map
                     </button>
                   </div>
-                </div>
 
                 {/* Book Now Button */}
                 <button
@@ -751,17 +883,20 @@ const HomePage = ({ navigate }) => {
               </div>
             )}
 
-            {/* Read More View */}
-            {modalView === "readMore" && (
-              <div className="flex flex-col h-full bg-[#FFFBF4]">
-                <div className="flex items-center gap-3 px-5 pt-2 pb-4">
+                  {/* Book Now Button */}
                   <button
-                    onClick={() => setModalView("main")}
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-[#F3A218] bg-[#FFF0D6]"
+                    className="w-full py-3.5 rounded-xl font-bold text-white shadow-sm"
+                    style={{ background: "#F3A218" }}
+                    onClick={() => {
+                      navigate("eventbooked");
+                      setSelectedEvent(null);
+                      setModalView("main");
+                    }}
                   >
-                    <FiArrowLeft size={18} />
+                    Book Now
                   </button>
                 </div>
+              )}
 
                 <h3
                   className="px-5 text-lg font-bold mb-4"
@@ -805,8 +940,7 @@ const HomePage = ({ navigate }) => {
                     </a>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Map View */}
             {modalView === "map" && (
@@ -841,8 +975,8 @@ const HomePage = ({ navigate }) => {
               </div>
             )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

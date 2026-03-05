@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import wa1 from "../assets/Frame 2147225395 (1).png";
-import wa2 from "../assets/wallet_5_fill.png";
+import Header from "../components/Header";
 import emptyBase from "../assets/event-modal/Rectangle 71.png";
 import emptyTicket from "../assets/event-modal/ticket_fill.png";
 
@@ -20,6 +18,31 @@ import memoji5 from "../assets/event-modal/avatar/Memoji.png";
 const EventsPage = ({ navigate }) => {
     const [activeTab, setActiveTab] = useState("Upcoming");
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [favorites, setFavorites] = useState([]);
+
+    React.useEffect(() => {
+        const saved = localStorage.getItem("meegent_favorites");
+        if (saved) {
+            try {
+                setFavorites(JSON.parse(saved));
+            } catch (e) {
+                console.error("Failed to parse favorites", e);
+            }
+        }
+    }, []);
+
+    const toggleFavorite = (event, e) => {
+        if (e) e.stopPropagation();
+        let newFavs;
+        const isFav = favorites.some((fav) => fav.id === event.id);
+        if (isFav) {
+            newFavs = favorites.filter((fav) => fav.id !== event.id);
+        } else {
+            newFavs = [...favorites, event];
+        }
+        setFavorites(newFavs);
+        localStorage.setItem("meegent_favorites", JSON.stringify(newFavs));
+    };
 
     // Mockup data grouping by date
     const [groupedEvents] = useState([
@@ -92,30 +115,7 @@ const EventsPage = ({ navigate }) => {
             }}
         >
             {/* Top bar */}
-            <div>
-                <div className="max-w-5xl mx-auto flex justify-end pt-5 pb-2 px-5 md:px-8">
-                    <div className="flex items-center gap-5 bg-white rounded-full px-5 py-2.5 shadow-sm">
-                        <Link to="/profile">
-                            <img src={wa1} alt="Profile" className="w-5 h-5 object-contain" />
-                        </Link>
-                        <Link to="/wallet">
-                            <img src={wa2} alt="Wallet" className="w-5 h-5 object-contain" />
-                        </Link>
-                        <Link to="/favorites" className="flex items-center justify-center">
-                            <svg
-                                width="20"
-                                height="20"
-                                fill="none"
-                                stroke="#F3A218"
-                                strokeWidth="2"
-                                viewBox="0 0 24 24"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
-                        </Link>
-                    </div>
-                </div>
-            </div>
+            <Header />
 
             {/* Content wrapper */}
             <div className="flex-1 flex flex-col w-full max-w-5xl mx-auto px-5 md:px-8 pt-4">
@@ -164,11 +164,20 @@ const EventsPage = ({ navigate }) => {
                                     {selectedEvent.title}
                                 </h2>
                             </div>
-                            <div className="w-10 h-10 flex items-center justify-center rounded-full">
-                                <svg width="24" height="24" fill="none" stroke="#F3A218" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
-                                    <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
-                                    <path d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-                                </svg>
+                            <div
+                                className="w-10 h-10 flex items-center justify-center rounded-full cursor-pointer hover:bg-black/5"
+                                onClick={(e) => toggleFavorite(selectedEvent, e)}
+                            >
+                                {favorites.some((fav) => fav.id === selectedEvent.id) ? (
+                                    <svg width="24" height="24" fill="#F3A218" viewBox="0 0 24 24">
+                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                    </svg>
+                                ) : (
+                                    <svg width="24" height="24" fill="none" stroke="#F3A218" strokeWidth="2" viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101" />
+                                        <path d="M10.172 13.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                    </svg>
+                                )}
                             </div>
                         </div>
 
@@ -285,10 +294,19 @@ const EventsPage = ({ navigate }) => {
                                                     </svg>
                                                 </div>
                                                 {/* Top Right Icon (Heart) */}
-                                                <div className="absolute top-6 right-6 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm">
-                                                    <svg width="18" height="18" fill="#F3A218" viewBox="0 0 24 24">
-                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                                    </svg>
+                                                <div
+                                                    className="absolute top-6 right-6 w-9 h-9 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer hover:scale-105 transition-transform"
+                                                    onClick={(e) => toggleFavorite(event, e)}
+                                                >
+                                                    {favorites.some((fav) => fav.id === event.id) ? (
+                                                        <svg width="18" height="18" fill="#F3A218" viewBox="0 0 24 24">
+                                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                                        </svg>
+                                                    ) : (
+                                                        <svg width="18" height="18" fill="none" stroke="#F3A218" strokeWidth="2" viewBox="0 0 24 24">
+                                                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                                        </svg>
+                                                    )}
                                                 </div>
                                             </div>
 

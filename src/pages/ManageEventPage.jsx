@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { FiLink } from "react-icons/fi";
+import Header from "../components/Header";
 
 // Assets
-import wa1 from "../assets/Frame 2147225395 (1).png";
-import wa2 from "../assets/wallet_5_fill.png";
 import lo from "../assets/location_fill.png";
 import lo2 from "../assets/alarm_2_fill.png";
 import mapImage from "../assets/event-modal/Basemap image.png";
@@ -42,28 +41,7 @@ const ManageEventPage = () => {
             }}
         >
             {/* Top bar */}
-            <div className="max-w-5xl mx-auto w-full flex justify-end pt-5 pb-2 px-5 md:px-8">
-                <div className="flex items-center gap-5 bg-white rounded-full px-5 py-2.5 shadow-sm">
-                    <Link to="/profile">
-                        <img src={wa1} alt="Profile" className="w-5 h-5 object-contain" />
-                    </Link>
-                    <Link to="/wallet">
-                        <img src={wa2} alt="Wallet" className="w-5 h-5 object-contain" />
-                    </Link>
-                    <Link to="/favorites" className="flex items-center justify-center">
-                        <svg
-                            width="20"
-                            height="20"
-                            fill="none"
-                            stroke="#F3A218"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                    </Link>
-                </div>
-            </div>
+            <Header />
 
             {/* Content wrapper */}
             <div className="flex-1 flex flex-col w-full max-w-5xl mx-auto px-5 md:px-8">

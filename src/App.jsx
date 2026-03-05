@@ -14,6 +14,7 @@ import EventsPage from "./pages/EventsPage";
 import ManageEventPage from "./pages/ManageEventPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotificationPage from "./pages/NotificationPage";
+import EventBookedPage from "./pages/EventBookedPage";
 
 const MobileFrame = ({ children }) => (
   <div
@@ -99,6 +100,10 @@ function App() {
       <Route
         path="/notifications"
         element={<NotificationPage />}
+      />
+      <Route
+        path="/eventbooked"
+        element={<EventBookedPage navigate={navigate} />}
       />
     </Routes>
   );
