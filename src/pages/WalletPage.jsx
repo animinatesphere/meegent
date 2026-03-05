@@ -35,7 +35,9 @@ const WalletPage = () => {
 
   const [showTransactions, setShowTransactions] = useState(true);
 
-  const balance = showTransactions ? "100.20" : "0.00";
+  // Split balance to style decimals differently
+  const balanceWhole = showTransactions ? "100" : "0";
+  const balanceDecimal = showTransactions ? ".20" : ".00";
 
   useEffect(() => {
     setTimeout(() => setFadeIn(true), 100);
@@ -113,7 +115,6 @@ const WalletPage = () => {
           className="text-2xl font-bold mb-2"
           style={{
             color: "#2D2A26",
-            fontFamily: "'Georgia', serif",
           }}
         >
           My Wallet
@@ -150,83 +151,96 @@ const WalletPage = () => {
 
         {/* Wallet card */}
         <div
-          className="rounded-3xl p-5 mb-8 relative overflow-hidden"
+          className="rounded-[32px] p-6 mb-8 relative flex flex-col justify-between"
           style={{
-            background: "#E8960C",
-            minHeight: 220,
+            background: "#F2A214",
+            minHeight: 240,
+            boxShadow: "0 8px 32px rgba(242, 162, 20, 0.2)",
           }}
         >
-          {/* Keith Haring-style art pattern */}
+          {/* Top patterned area with wavy cut-out */}
           <div
-            className="absolute top-4 left-1/2 -translate-x-1/2 rounded-2xl overflow-hidden"
+            className="absolute top-3 left-3 right-3 h-[130px] rounded-[24px] overflow-hidden"
             style={{
-              width: "85%",
-              height: 130,
-              background: "#1A1A1A",
+              background: "#121212",
             }}
           >
             {/* Abstract pattern overlay */}
             <svg
-              viewBox="0 0 400 200"
+              viewBox="0 0 400 140"
               className="w-full h-full"
-              style={{ opacity: 0.6 }}
+              style={{ opacity: 1, position: "absolute", top: 0, left: 0 }}
             >
-              {/* Haring-inspired figures */}
-              <g stroke="#E8960C" strokeWidth="3" fill="none">
-                {/* Figure 1 */}
-                <path d="M40 140 Q50 80 80 100 Q110 120 100 60" />
-                <circle cx="100" cy="50" r="12" />
-                <path d="M70 110 L50 130 M90 90 L120 80" />
+              {/* Haring-inspired figures with white strokes */}
+              <g stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" fill="none">
+                {/* Random energetic lines mirroring mockup */}
+                <path d="M-10 40 Q20 20 30 80 Q40 120 50 110" />
+                <path d="M20 120 Q30 90 40 100" />
+                <path d="M60 20 L80 40 L70 80 L90 70 L110 50" />
 
-                {/* Figure 2 */}
-                <path d="M150 150 Q160 90 190 110 Q210 130 200 70" />
-                <circle cx="200" cy="58" r="12" />
-                <path d="M170 120 L145 140 M195 95 L225 85" />
+                {/* Figure 1 - center left */}
+                <path d="M150 100 L160 60 L180 50 L190 70 L200 40 L210 50 L220 80 L230 110" />
+                <path d="M175 70 L140 85 L120 110" />
+                <path d="M165 40 L150 10" />
 
-                {/* Figure 3 - crawling */}
-                <path d="M250 130 Q280 100 310 120 Q340 140 350 100" />
-                <circle cx="260" cy="115" r="12" />
-                <path d="M290 108 L280 80 M320 125 L340 150" />
+                {/* Circle with cross */}
+                <circle cx="90" cy="40" r="16" />
+                <path d="M78 35 L102 45 M82 48 L98 32" />
 
-                {/* X mark */}
-                <circle cx="60" cy="60" r="18" strokeWidth="3" fill="none" />
-                <path d="M50 50 L70 70 M70 50 L50 70" strokeWidth="3" />
+                {/* Figure 2 - right */}
+                <path d="M260 20 L270 50 L250 80 Q260 110 280 120 M270 50 L300 40 L320 70 L300 100 M290 80 L320 120" />
 
-                {/* Radiating lines */}
-                <path d="M150 50 L155 35 M160 48 L170 35 M145 55 L130 45" />
-                <path d="M300 70 L310 55 M295 65 L285 50 M305 75 L320 65" />
-
-                {/* Additional squiggles */}
-                <path d="M30 40 Q45 20 60 35" />
-                <path d="M330 50 Q350 30 370 45" />
-                <path d="M180 160 Q200 145 220 160" />
+                {/* Extra squiggles */}
+                <path d="M340 30 Q360 50 350 80 L380 90 M360 85 L390 120 M380 20 L410 40" />
+                <path d="M120 -10 Q140 20 130 50" />
               </g>
+
+            </svg>
+
+            {/* Wavy shape cut out from bottom, drawing the card's yellow background with a white stroke */}
+            <svg
+              className="absolute bottom-[-1px] left-0 w-full"
+              viewBox="0 0 400 24"
+              preserveAspectRatio="none"
+              style={{ height: "24px" }}
+            >
+              <path
+                d="M -10 30 L -10 24 Q 200 0 410 24 L 410 30 Z"
+                fill="#F2A214"
+                stroke="#FFFFFF"
+                strokeWidth="2.5"
+              />
             </svg>
           </div>
 
-          {/* Balance info */}
-          <div className="relative" style={{ marginTop: 145 }}>
-            <p className="text-sm mb-1" style={{ color: "#FFF8E8" }}>
-              Available balance
-            </p>
-            <div className="flex items-center justify-between">
-              <h2
-                className="text-3xl font-black"
-                style={{ color: "white", fontFamily: "'Georgia', serif" }}
-              >
-                $GLM {balance}
+          {/* Spacer to push content down */}
+          <div className="flex-1"></div>
+
+          {/* Balance info bottom section */}
+          <div className="relative mt-[110px] w-full flex items-end justify-between">
+            <div className="flex flex-col">
+              <p className="text-[15px] font-medium mb-1" style={{ color: "#1A1A1A" }}>
+                Available balance
+              </p>
+              <h2 className="flex items-baseline font-black leading-none m-0 p-0 shadow-none">
+                <span className="text-4xl" style={{ color: "#1A1A1A", letterSpacing: "-0.04em" }}>
+                  $GLM {balanceWhole}
+                </span>
+                <span className="text-4xl font-black" style={{ color: "#74726B", letterSpacing: "-0.04em" }}>
+                  {balanceDecimal}
+                </span>
               </h2>
-              <button
-                className="px-6 py-2.5 rounded-full text-sm font-bold"
-                style={{
-                  background: "white",
-                  color: "#2D2A26",
-                  boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-                }}
-              >
-                Send
-              </button>
             </div>
+
+            <button
+              className="px-6 py-[14px] rounded-[14px] text-base font-medium shadow-sm transition-transform hover:scale-105"
+              style={{
+                background: "#EEDBB4",
+                color: "#1A1A1A",
+              }}
+            >
+              Send
+            </button>
           </div>
         </div>
 
@@ -236,7 +250,6 @@ const WalletPage = () => {
             className="text-lg font-bold"
             style={{
               color: "#2D2A26",
-              fontFamily: "'Georgia', serif",
             }}
           >
             Recent activity
