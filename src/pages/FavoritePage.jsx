@@ -77,17 +77,41 @@ const FavoritePage = ({ navigate }) => {
       }}
     >
       {/* Top bar */}
-      <Header />
+      <div>
+        <div className="max-w-5xl mx-auto flex justify-end pt-5 pb-2 px-5 md:px-8">
+          <div className="flex items-center gap-5 bg-white rounded-full px-5 py-2.5 shadow-sm">
+            <Link to="/home">
+              <img src={wa1} alt="Profile" className="w-5 h-5 object-contain" />
+            </Link>
+            <Link to="/wallet">
+              <img src={wa2} alt="Wallet" className="w-5 h-5 object-contain" />
+            </Link>
+            <div className="flex items-center justify-center">
+              <svg
+                width="20"
+                height="20"
+                fill="#F3A218"
+                stroke="#F3A218"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Content */}
       <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col">
         {favorites.length === 0 ? (
           /* Empty state */
           <div className="flex-1 flex items-center justify-center">
-            <p
-              className="text-sm md:text-base in"
-              style={{ color: "#8B8068" }}
-            >
+            <p className="text-sm md:text-base in" style={{ color: "#8B8068" }}>
               No favorite yet
             </p>
           </div>
@@ -156,10 +180,7 @@ const FavoritePage = ({ navigate }) => {
                     </p>
                     <div className="flex items-center gap-2 mb-2">
                       <img src={lo} alt="" />
-                      <span
-                        className="text-xs in"
-                        style={{ color: "#475367" }}
-                      >
+                      <span className="text-xs in" style={{ color: "#475367" }}>
                         {event.location}
                       </span>
                       <img src={lo2} alt="" />

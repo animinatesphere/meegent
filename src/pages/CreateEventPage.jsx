@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
-import Header from "../components/Header";
-
+import wa1 from "../assets/Frame 2147225395 (1).png";
+import wa2 from "../assets/wallet_5_fill.png";
+import lo2 from "../assets/link_2_line.png";
+import { Link } from "react-router-dom";
 // eslint-disable-next-line no-unused-vars
 const CreateEventPage = ({ navigate, goBack }) => {
   const [eventName, setEventName] = useState("");
@@ -10,7 +12,9 @@ const CreateEventPage = ({ navigate, goBack }) => {
   const [endDate, setEndDate] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [ticketPrice] = useState("Free $GLM");
+  const [ticketPrice, setTicketPrice] = useState("Free $GLM");
+  const [showPriceModal, setShowPriceModal] = useState(false);
+  const [priceInput, setPriceInput] = useState("0");
   const [requireApproval, setRequireApproval] = useState(false);
   const [capacity] = useState("Unlimited");
   const [gmail, setGmail] = useState("");
@@ -40,7 +44,34 @@ const CreateEventPage = ({ navigate, goBack }) => {
       }}
     >
       {/* Top bar */}
-      <Header />
+      <div>
+        <div className="max-w-5xl mx-auto flex justify-end pt-5 pb-2 px-5 md:px-8">
+          <div className="flex items-center gap-5 bg-white rounded-full px-5 py-2.5 shadow-sm">
+            <Link to="/profile">
+              <img src={wa1} alt="Profile" className="w-5 h-5 object-contain" />
+            </Link>
+            <Link to="/wallet">
+              <img src={wa2} alt="Wallet" className="w-5 h-5 object-contain" />
+            </Link>
+            <Link to="/favorites" className="flex items-center justify-center">
+              <svg
+                width="20"
+                height="20"
+                fill="none"
+                stroke="#F3A218"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                />
+              </svg>
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* Form content */}
       <div className="flex-1 overflow-y-auto">
@@ -66,7 +97,7 @@ const CreateEventPage = ({ navigate, goBack }) => {
           {/* Image placeholder */}
           <div className="px-5 md:px-8 pt-3 pb-4">
             <div
-              className="rounded-2xl flex items-center justify-center relative h-[180px] md:h-[240px]"
+              className="rounded-2xl flex items-center justify-center relative h-[150px] sm:h-[180px] md:h-[240px]"
               style={{
                 background: "linear-gradient(135deg, #F5E6B8 0%, #E8D48B 100%)",
               }}
@@ -85,29 +116,33 @@ const CreateEventPage = ({ navigate, goBack }) => {
           {/* Event Name */}
           <div className="px-5 md:px-8 pb-3">
             <div className="flex items-center gap-2">
-              <input
-                type="text"
-                placeholder="Event Name"
-                value={eventName}
-                onChange={(e) => setEventName(e.target.value)}
-                className="text-2xl md:text-3xl font-bold flex-1 bg-transparent outline-none"
-                style={{
-                  color: "#2D2A26",
-                  fontFamily: "'Georgia', serif",
-                  caretColor: "#E8960C",
-                }}
-              />
-              <svg
-                width="16"
-                height="16"
-                fill="none"
-                stroke="#E8960C"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
+              <div className="flex items-center flex-1 min-w-0 gap-2">
+                <input
+                  type="text"
+                  placeholder="Event Name"
+                  value={eventName}
+                  onChange={(e) => setEventName(e.target.value)}
+                  className="text-xl sm:text-2xl md:text-3xl font-bold flex-1 min-w-0 bg-transparent outline-none"
+                  style={{
+                    color: "#2D2A26",
+                    fontFamily: "'Georgia', serif",
+                    caretColor: "#E8960C",
+                  }}
+                />
+                <svg
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="#E8960C"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                  className="flex-shrink-0"
+                >
+                  <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                  <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+                </svg>
+              </div>
+              <img src={lo2} alt="" className="w-5 h-5 flex-shrink-0" />
             </div>
           </div>
 
@@ -242,7 +277,10 @@ const CreateEventPage = ({ navigate, goBack }) => {
               className="mx-5 md:mx-0 rounded-2xl p-4 md:p-5 mb-4 md:mb-0"
               style={{ background: "#F5F0E8" }}
             >
-              <div className="flex items-center justify-between mb-3">
+              <button
+                className="flex items-center justify-between mb-3 w-full"
+                onClick={() => setShowPriceModal(true)}
+              >
                 <div className="flex items-center gap-2">
                   <svg
                     width="16"
@@ -278,7 +316,7 @@ const CreateEventPage = ({ navigate, goBack }) => {
                     <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                   </svg>
                 </div>
-              </div>
+              </button>
 
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
@@ -446,7 +484,7 @@ const CreateEventPage = ({ navigate, goBack }) => {
           className="w-full py-4 md:py-5 rounded-full text-base md:text-lg font-bold cursor-pointer"
           style={{
             background: "#E8960C",
-            color: "#2D2A26",
+            color: "#F4F4F4",
             boxShadow: "0 4px 20px rgba(232, 150, 12, 0.4)",
           }}
           onClick={handleCreate}
@@ -454,6 +492,109 @@ const CreateEventPage = ({ navigate, goBack }) => {
           Create Event
         </button>
       </div>
+
+      {/* Ticket Price Modal */}
+      {showPriceModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center px-5"
+          style={{ background: "rgba(0,0,0,0.5)" }}
+          onClick={() => setShowPriceModal(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-3xl p-6 relative"
+            style={{
+              background: "#FFFBF4",
+              boxShadow: "0 16px 48px rgba(0,0,0,0.15)",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* User info pill */}
+            <div
+              className="flex items-center gap-2.5 rounded-full px-3 py-2 mb-6 w-fit"
+              style={{ background: "#FFF3E0", border: "1px solid #FDE9C4" }}
+            >
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{ background: "#E8960C" }}
+              >
+                <svg width="14" height="14" fill="white" viewBox="0 0 24 24">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm font-semibold" style={{ color: "#2D2A26" }}>
+                  {eventName || "Event"}
+                </p>
+                <p className="text-[11px]" style={{ color: "#8B8068" }}>
+                  @organizer
+                </p>
+              </div>
+            </div>
+
+            {/* Title */}
+            <h3
+              className="text-lg font-bold text-center mb-5"
+              style={{ color: "#2D2A26" }}
+            >
+              Ticket Price
+            </h3>
+
+            {/* Price input area */}
+            <div
+              className="rounded-2xl px-5 py-4 mb-6 flex items-center justify-center gap-2"
+              style={{ background: "#FFF8EE", border: "1.5px solid #FDE9C4" }}
+            >
+              <span
+                className="text-2xl sm:text-3xl font-black"
+                style={{ color: "#2D2A26", fontFamily: "'Georgia', serif" }}
+              >
+                $GLM
+              </span>
+              <input
+                type="number"
+                value={priceInput}
+                onChange={(e) => setPriceInput(e.target.value)}
+                className="text-2xl sm:text-3xl font-black bg-transparent outline-none w-20 sm:w-24"
+                style={{
+                  color: "#2D2A26",
+                  fontFamily: "'Georgia', serif",
+                  caretColor: "#E8960C",
+                }}
+                min="0"
+                autoFocus
+              />
+              <svg
+                width="16"
+                height="16"
+                fill="none"
+                stroke="#E8960C"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                className="flex-shrink-0"
+              >
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </div>
+
+            {/* Confirm button */}
+            <button
+              className="w-full py-3.5 rounded-full text-base font-bold"
+              style={{
+                background: "#E8960C",
+                color: "white",
+              }}
+              onClick={() => {
+                const val = Number(priceInput);
+                setTicketPrice(val > 0 ? `${val} $GLM` : "Free $GLM");
+                setShowPriceModal(false);
+              }}
+            >
+              Set Price
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
