@@ -1,40 +1,38 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import wa1 from "../assets/Frame 2147225395 (1).png";
-import wa2 from "../assets/wallet_5_fill.png";
-import ev from "../assets/image 52.png";
+import Header from "../components/Header";
 import fra from "../assets/Frame 2147226215.png";
 import lo from "../assets/location_fill.png";
 import lo2 from "../assets/alarm_2_fill.png";
+import ev from "../assets/image 52.png";
+
+import memoji1 from "../assets/event-modal/avatar/Memoji-1.png";
+import memoji2 from "../assets/event-modal/avatar/Memoji-2.png";
+import memoji3 from "../assets/event-modal/avatar/Memoji-3.png";
+import memoji4 from "../assets/event-modal/avatar/Memoji-4.png";
+import memoji5 from "../assets/event-modal/avatar/Memoji.png";
 
 const FavoritePage = () => {
   const [fadeIn, setFadeIn] = useState(false);
-  const [favorites] = useState([
-    {
-      id: 1,
-      title: "Acoustic Serenade Show",
-      desc: "Listen to good music with Joel.",
-      location: "New York, USA",
-      date: "May 29 - 10:00 AM",
-      price: "200 $GLM",
-      perPerson: true,
-      ev: ev,
-    },
-    {
-      id: 2,
-      title: "Arkiv Hackathon",
-      desc: "Web3 Database builders challenge.",
-      location: "New York, USA",
-      date: "May 29 - 10:00 AM",
-      price: "0 $GLM",
-      perPerson: true,
-      ev: ev,
-    },
-  ]);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     setTimeout(() => setFadeIn(true), 100);
+    const saved = localStorage.getItem("meegent_favorites");
+    if (saved) {
+      try {
+        setFavorites(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse favorites", e);
+      }
+    }
   }, []);
+
+  const toggleFavorite = (event, e) => {
+    e.stopPropagation();
+    const newFavs = favorites.filter((fav) => fav.id !== event.id);
+    setFavorites(newFavs);
+    localStorage.setItem("meegent_favorites", JSON.stringify(newFavs));
+  };
 
   return (
     <div
@@ -46,30 +44,7 @@ const FavoritePage = () => {
       }}
     >
       {/* Top bar */}
-      <div>
-        <div className="max-w-5xl mx-auto flex justify-end pt-5 pb-2 px-5 md:px-8">
-          <div className="flex items-center gap-5 bg-white rounded-full px-5 py-2.5 shadow-sm">
-            <Link to="/profile">
-              <img src={wa1} alt="Profile" className="w-5 h-5 object-contain" />
-            </Link>
-            <Link to="/wallet">
-              <img src={wa2} alt="Wallet" className="w-5 h-5 object-contain" />
-            </Link>
-            <div className="flex items-center justify-center">
-              <svg
-                width="20"
-                height="20"
-                fill="#F3A218"
-                stroke="#F3A218"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Header />
 
       {/* Content */}
       <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col">
@@ -106,16 +81,17 @@ const FavoritePage = () => {
                     <div className="absolute top-3 left-3 w-7 h-7 rounded-lg flex items-center justify-center">
                       <img src={fra} alt="" />
                     </div>
-                    <div className="absolute top-3 right-3 w-7 h-7 rounded-full flex items-center justify-center">
+                    <div
+                      className="absolute top-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer"
+                      onClick={(e) => toggleFavorite(event, e)}
+                    >
                       <svg
-                        width="14"
-                        height="14"
+                        width="16"
+                        height="16"
                         fill="#F3A218"
-                        stroke="#F3A218"
-                        strokeWidth="2"
                         viewBox="0 0 24 24"
                       >
-                        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                       </svg>
                     </div>
                   </div>
@@ -170,16 +146,18 @@ const FavoritePage = () => {
                           {event.perPerson ? "/Person" : ""}
                         </span>
                       </span>
-                      <div className="flex -space-x-2">
-                        {[...Array(4)].map((_, i) => (
-                          <div
-                            key={i}
-                            className="w-5 h-5 rounded-full border-2 border-white"
-                            style={{
-                              background: `hsl(${30 + i * 20}, 60%, ${55 + i * 5}%)`,
-                            }}
-                          />
-                        ))}
+                      <div className="flex -space-x-[10px] items-center">
+                        <div className="w-[20px] h-[20px] rounded-full overflow-hidden border-[1.5px] border-[#FFF9EF] bg-[#FDE4B4] shadow-sm relative z-[1]"><img src={memoji1} className="w-full h-full object-cover" /></div>
+                        <div className="w-[20px] h-[20px] rounded-full overflow-hidden border-[1.5px] border-[#FFF9EF] bg-[#FDE4B4] shadow-sm relative z-[2]"><img src={memoji2} className="w-full h-full object-cover" /></div>
+                        <div className="w-[20px] h-[20px] rounded-full overflow-hidden border-[1.5px] border-[#FFF9EF] bg-[#FDE4B4] shadow-sm relative z-[3]"><img src={memoji3} className="w-full h-full object-cover" /></div>
+                        <div className="w-[20px] h-[20px] rounded-full overflow-hidden border-[1.5px] border-[#FFF9EF] bg-[#FDE4B4] shadow-sm relative z-[4]"><img src={memoji4} className="w-full h-full object-cover" /></div>
+                        <div className="w-[20px] h-[20px] rounded-full overflow-hidden border-[1.5px] border-[#FFF9EF] bg-[#FDE4B4] shadow-sm relative z-[5]"><img src={memoji5} className="w-full h-full object-cover" /></div>
+                        <div
+                          className="w-[20px] h-[20px] rounded-full border-[1.5px] border-[#FFF9EF] shadow-sm relative z-[6] flex items-center justify-center -ml-1"
+                          style={{ background: "#F3A218" }}
+                        >
+                          <span className="text-[7px] font-bold text-white">+34</span>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logo from "../assets/Events.png";
+import logo from "../assets/logo.svg";
 
 const SplashPage = ({ navigate }) => {
   const [fadeIn, setFadeIn] = useState(false);

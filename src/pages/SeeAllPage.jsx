@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import wa1 from "../assets/Frame 2147225395 (1).png";
-import wa2 from "../assets/wallet_5_fill.png";
+import Header from "../components/Header";
 import ev from "../assets/image 52.png";
+import ev2 from "../assets/image 26.png";
+import ev3 from "../assets/event-modal/image 24.png";
 import fra from "../assets/Frame 2147226215.png";
 import lo from "../assets/location_fill.png";
 import lo2 from "../assets/alarm_2_fill.png";
@@ -15,10 +15,32 @@ import memoji5 from "../assets/event-modal/avatar/Memoji.png";
 
 const SeeAllPage = () => {
   const [fadeIn, setFadeIn] = useState(false);
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
     setTimeout(() => setFadeIn(true), 100);
+    const saved = localStorage.getItem("meegent_favorites");
+    if (saved) {
+      try {
+        setFavorites(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse favorites", e);
+      }
+    }
   }, []);
+
+  const toggleFavorite = (event, e) => {
+    e.stopPropagation();
+    let newFavs;
+    const isFav = favorites.some((fav) => fav.id === event.id);
+    if (isFav) {
+      newFavs = favorites.filter((fav) => fav.id !== event.id);
+    } else {
+      newFavs = [...favorites, event];
+    }
+    setFavorites(newFavs);
+    localStorage.setItem("meegent_favorites", JSON.stringify(newFavs));
+  };
 
   const events = [
     {
@@ -29,7 +51,7 @@ const SeeAllPage = () => {
       date: "May 29 - 10:00 AM",
       price: "200 $GLM",
       perPerson: true,
-      ev: ev,
+      ev: ev2,
     },
     {
       id: 2,
@@ -49,7 +71,7 @@ const SeeAllPage = () => {
       date: "May 29 - 10:00 AM",
       price: "0 $GLM",
       perPerson: true,
-      ev: ev,
+      ev: ev3,
     },
   ];
 
@@ -63,30 +85,7 @@ const SeeAllPage = () => {
       }}
     >
       {/* Top bar */}
-      <div>
-        <div className="max-w-5xl mx-auto flex justify-end pt-5 pb-2 px-5 md:px-8">
-          <div className="flex items-center gap-5 bg-white rounded-full px-5 py-2.5 shadow-sm">
-            <Link to="/profile">
-              <img src={wa1} alt="Profile" className="w-5 h-5 object-contain" />
-            </Link>
-            <Link to="/wallet">
-              <img src={wa2} alt="Wallet" className="w-5 h-5 object-contain" />
-            </Link>
-            <Link to="/favorites" className="flex items-center justify-center">
-              <svg
-                width="20"
-                height="20"
-                fill="none"
-                stroke="#F3A218"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </div>
+      <Header />
 
       {/* Content */}
       <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col">
@@ -123,11 +122,18 @@ const SeeAllPage = () => {
                     <img src={fra} className="w-4 h-4" />
                   </div>
                   <div
-                    className="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm"
+                    className="absolute top-4 right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-sm cursor-pointer hover:scale-105 transition-transform"
+                    onClick={(e) => toggleFavorite(event, e)}
                   >
-                    <svg width="16" height="16" fill="#F3A218" viewBox="0 0 24 24">
-                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                    </svg>
+                    {favorites.some((fav) => fav.id === event.id) ? (
+                      <svg width="16" height="16" fill="#F3A218" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                    ) : (
+                      <svg width="16" height="16" fill="none" stroke="#F3A218" strokeWidth="2" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                      </svg>
+                    )}
                   </div>
                 </div>
 
